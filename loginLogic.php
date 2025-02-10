@@ -51,4 +51,3 @@
             file_put_contents('passwords.txt',$passwords);
         }
     }
-    register();
