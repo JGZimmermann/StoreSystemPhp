@@ -62,7 +62,20 @@
 
     function logout()
     {
+        $log = getLog();
+        $data = getData();
+        $user = trim(getUser());
+        $log[] = "O $user se deslogou no dia $data\n";
+        file_put_contents("data/log.txt", $log);
         file_put_contents('data/loggedUsers.txt',"");
+    }
+
+    function showLog()
+    {
+        $logs = getLog();
+        foreach ($logs as $log){
+            echo $log;
+        }
     }
 
     /*  Função com variável global

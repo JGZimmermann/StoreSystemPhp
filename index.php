@@ -2,12 +2,12 @@
     require_once('loginLogic.php');
     require_once('salesLogic.php');
     $ids = [];
-    $var =& $ids;
     $items = [];
     $prices = [];
     $stocks = [];
+    $cashDrawer = 0;
 
-    function homepage($ids,$items,$prices,$stocks)
+    function homepage()
     {
         system("clear");
         echo "Qual operação deseja fazer: \n1 - Login\n2 - Registre-se \n";
@@ -18,23 +18,28 @@
                 while(!$logged){
                     $logged = verifyLogin();
                 }
-                sales($ids,$items,$prices,$stocks);
+                sales();
                 break;
             case 2:
                 register();
-                sales($ids,$items,$prices,$stocks);
+                sales();
                 break;
             default:
                 echo "Esta entrada não é válida! \n";
-                homepage($ids,$items,$prices,$stocks);
+                homepage();
                 break;
         }
     }
-    homepage($ids,$items,$prices,$stocks);
-    function sales($ids,$items,$prices,$stocks)
+    $cashDrawer = readline("Digite quanto dinheiro existe no caixa: ");
+    homepage();
+
+    function sales()
     {
+        global $ids;
+        global $cashDrawer;
+
         system("clear");
-        echo "Qual operação deseja realizar: \n1 - Cadastrar um item\n2 - Alterar um item\n3 - Deletar um item\n4 - Listar itens\n5 - Logout\n";
+        echo "Qual operação deseja realizar: \n1 - Cadastrar um item\n2 - Alterar um item\n3 - Deletar um item\n4 - Listar itens\n5 - Vender item\n6 - Logout\n7 - Exibir log\n8 - Exibir quanto tem em caixa\n9 - Sair\n";
         $choice = readline("Digite o numero da operação que deseja fazer: ");
         switch ($choice){
             case 1:
@@ -43,25 +48,42 @@
                 $price = readline("Digite o preço do produto: ");
                 $stock = readline("Digite a quantidade do produto: ");
                 registerFullItem($id,$item,$price,$stock);
-                sales($ids,$items,$prices,$stocks);
+                sales();
                 break;
             case 2:
-                updateItem($ids);
-                sales($ids,$items,$prices,$stocks);
+                updateItem();
+                sales();
                 break;
             case 3:
                 $id = readline("Digite o id do produto que deseja deletar: ");
                 echo "Item deletado!";
                 delete($id,$ids);
-                sales($ids,$items,$prices,$stocks);
+                sales();
                 break;
             case 4:
-                listItem($ids,$items,$prices,$stocks);
-                sales($ids,$items,$prices,$stocks);
+                listItem();
+                sales();
                 break;
             case 5:
+                $id = readline("Digite o id do produto que deseja vender: ");
+                $quantity = readline("Digite a quantidade que deseja vender: ");
+                $change = readline("Digite a quantidade de dinheiro que o cliente entregou: ");
+                sellItem($id,$quantity,$cashDrawer,$change);
+                sales();
+                break;
+            case 6:
                 logout();
-                homepage($ids,$items,$prices,$stocks);
+                homepage();
+                break;
+            case 7:
+                showLog();
+                sales();
+                break;
+            case 8:
+                echo "$cashDrawer\n";
+                sales();
+                break;
+            default:
                 break;
         }
     }
