@@ -2,11 +2,11 @@
     require_once("logLogic.php");
     function getUsers()
     {
-        return file('users.txt');
+        return file('data/users.txt');
     }
     function getPasswords()
     {
-        return file('passwords.txt');
+        return file('data/passwords.txt');
     }
     function verifyLogin()
     {
@@ -22,7 +22,7 @@
                 $position = array_search($value,$users);
                 if(trim($passwords[$position]) == $password){
                     $login = true;
-                    file_put_contents('loggedUsers.txt',"$user\n$password");
+                    file_put_contents('data/loggedUsers.txt',"$user\n$password");
                     setLogLoginRegister($user,"login");
                     return $login;
                 } else{
@@ -54,13 +54,53 @@
             $password = readline("Digite a senha do usuário: ");
             $users[] = "$user\n";
             $passwords[] = "$password\n";
-            file_put_contents('users.txt',$users);
-            file_put_contents('passwords.txt',$passwords);
+            file_put_contents('data/users.txt',$users);
+            file_put_contents('data/passwords.txt',$passwords);
             setLogLoginRegister($user,"cadastro");
         }
     }
 
     function logout()
     {
-        file_put_contents('loggedUsers.txt',"");
+        file_put_contents('data/loggedUsers.txt',"");
     }
+
+    /*  Função com variável global
+     *
+     * function userGlobal()
+    {
+        global $users;
+        $users = ["teste"];
+        return $users;
+    }
+
+    function passwordGlobal()
+    {
+        global $passwords;
+        $passwords = ["123"];
+        return $passwords;
+    }
+
+    function login()
+    {
+        $users = userGlobal();
+        $passwords = passwordGlobal();
+        $userLogin = readline("Digite o usuário: ");
+        $password = readline("Digite a senha: ");
+
+        foreach ($users as $user){
+            if($userLogin == $user){
+                $position = array_search($user,$users);
+                if($passwords[$position] == $password){
+                    return true;
+                } else{
+                    echo "Senha incorreta! \n";
+                    return false;
+                }
+            } else {
+                echo "Usuário não encontrado! \n";
+                return false;
+            }
+        }
+        return false;
+    }*/
